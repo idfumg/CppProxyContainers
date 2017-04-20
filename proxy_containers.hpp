@@ -4,6 +4,8 @@
 #include <string>
 #include <array>
 
+namespace proxy_containers {
+
 template<class T>
 class const_array {
 public:
@@ -392,5 +394,7 @@ constexpr bool operator == (const std::string& container, const const_string& ar
 {
     return arr == container;
 }
+
+} /* namespace proxy_containers */
 
 #endif /* PROXY_CONTAINERS_HPP */

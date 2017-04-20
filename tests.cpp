@@ -4,6 +4,8 @@
 
 #include "proxy_containers.hpp"
 
+using namespace proxy_containers;
+
 const_array<int> fn(const std::vector<int>& v) {
     return const_array<int> {v};
 }
