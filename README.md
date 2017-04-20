@@ -1,5 +1,5 @@
 # CppProxyContainers
- c++17 string_view convenient analog for lightwieight strings and arrays proxies. 
+ c++11 convenient analog of c++17 string_view for lightwieight strings and arrays proxies. 
 
 Proxy containers do not allocate any memory. They hold pointer to existing container/string/vector/array/literal string.
 String proxy can be used for convenient work with various string types. 
