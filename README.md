@@ -1,9 +1,10 @@
 # CppProxyContainers
  c++11 convenient analog of c++17 string_view for lightwieight strings and arrays proxies.
 
-Proxy containers do not allocate any memory. They hold pointer to existing container/string/vector/array/literal string.
+Proxy containers do not allocate any memory. 
+They hold pointer to existing container/string/vector/array/literal string.
 String proxy can be used for convenient work with various string types.
-It has some usefull methods like in/contains/find which also do not allocate memory, but return you lightweight proxy to existing objects.
+It has some usefull methods like in/contains/find/substr/subarray which also do not allocate memory, but return you lightweight proxy to existing objects.
 This containers can be used in generics functions called after creating real strings.
 So you can be sure data is always const, and all operations on it does not lead to memory allocations.
 All creations of std::string e.t.c will be perform explicit in code.
