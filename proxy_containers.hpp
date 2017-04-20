@@ -7,33 +7,33 @@
 namespace proxy_containers {
 
 template<class T>
-class const_array {
+class array_view {
 public:
     using const_iterator = const T* const;
     static constexpr auto npos = std::string::npos;
 
-    constexpr const_array(const T* const pointer, const std::size_t N) noexcept
+    constexpr array_view(const T* const pointer, const std::size_t N) noexcept
         : m_pointer {pointer}, m_size {N}
     {
 
     }
 
     template<std::size_t size>
-    constexpr const_array(const std::array<T, size>& param) noexcept
-        : const_array {&param[0], param.size()}
+    constexpr array_view(const std::array<T, size>& param) noexcept
+        : array_view {&param[0], param.size()}
     {
 
     }
 
     template<class U>
-    constexpr const_array(const U& param) noexcept
-        : const_array {param.data(), param.size()}
+    constexpr array_view(const U& param) noexcept
+        : array_view {param.data(), param.size()}
     {
 
     }
 
-    constexpr const_array(const T& param) noexcept
-        : const_array {&param, 1}
+    constexpr array_view(const T& param) noexcept
+        : array_view {&param, 1}
     {
 
     }
@@ -68,17 +68,17 @@ public:
         return m_pointer[i];
     }
 
-    constexpr const_array subarray(const std::size_t pos, const std::size_t n) const noexcept
+    constexpr array_view subarray(const std::size_t pos, const std::size_t n) const noexcept
     {
-        return const_array {data() + pos, n};
+        return array_view {data() + pos, n};
     }
 
-    constexpr const_array subarray(const std::size_t pos) const noexcept
+    constexpr array_view subarray(const std::size_t pos) const noexcept
     {
-        return substr(pos, size() - pos);
+        return subarray(pos, size() - pos);
     }
 
-    constexpr bool operator == (const const_array<T>& param) const noexcept
+    constexpr bool operator == (const array_view<T>& param) const noexcept
     {
         return isequal(m_pointer, 0, m_size, param.m_pointer, 0, param.size());
     }
@@ -128,7 +128,7 @@ public:
     template<class U>
     constexpr bool in(const U& param) const noexcept
     {
-        return const_array<T> {param}.contains(*this);
+        return array_view<T> {param}.contains(*this);
     }
 
     constexpr bool contains(const T* const s, const std::size_t size) const noexcept
@@ -157,7 +157,7 @@ public:
 
     constexpr std::size_t find(const T& param) const noexcept
     {
-        return find(const_array<T> {&param, 1});
+        return find(array_view<T> {&param, 1});
     }
 
 protected:
@@ -258,7 +258,7 @@ protected:
 #else
         std::size_t i = 0;
         while (i < bsize and (bsize - i >= asize)) {
-            if (const_array {b + i, asize} == const_array {a, asize}) {
+            if (array_view {b + i, asize} == array_view {a, asize}) {
                 return true;
             }
             i++;
@@ -285,7 +285,7 @@ protected:
 #else
         std::size_t i = 0;
         while (i < bsize and (bsize - i >= asize)) {
-            if (const_array {b + i, asize} == const_array {a, asize}) {
+            if (array_view {b + i, asize} == array_view {a, asize}) {
                 return i;
             }
             i++;
@@ -300,7 +300,7 @@ private:
 };
 
 template <class StreamT, class T>
-inline StreamT& operator << (StreamT& stream, const const_array<T>& param) noexcept
+inline StreamT& operator << (StreamT& stream, const array_view<T>& param) noexcept
 {
     stream << '[';
     for (std::size_t i = 0; i < param.size(); ++i) {
@@ -314,39 +314,39 @@ inline StreamT& operator << (StreamT& stream, const const_array<T>& param) noexc
 }
 
 template<class ContainerT, class T>
-constexpr bool operator == (const ContainerT& container, const const_array<T>& arr) noexcept
+constexpr bool operator == (const ContainerT& container, const array_view<T>& arr) noexcept
 {
     return arr == container;
 }
 
 
-class const_string : public const_array<char> {
+class string_view : public array_view<char> {
 public:
-    using const_array<char>::const_array;
-    using const_array<char>::operator<;
-    using const_array<char>::operator<=;
-    using const_array<char>::operator==;
-    using const_array<char>::operator>;
-    using const_array<char>::operator>=;
-    using const_array<char>::contains;
-    using const_array<char>::in;
-    using const_array<char>::find;
+    using array_view<char>::array_view;
+    using array_view<char>::operator<;
+    using array_view<char>::operator<=;
+    using array_view<char>::operator==;
+    using array_view<char>::operator>;
+    using array_view<char>::operator>=;
+    using array_view<char>::contains;
+    using array_view<char>::in;
+    using array_view<char>::find;
 
     template <std::size_t N>
-    constexpr const_string(const char(&pointer)[N]) noexcept
-        : const_array {pointer, N - 1}
+    constexpr string_view(const char(&pointer)[N]) noexcept
+        : array_view {pointer, N - 1}
     {
 
     }
 
-    constexpr const const_string substr(const std::size_t pos, const std::size_t n) const noexcept
+    constexpr const string_view substr(const std::size_t pos, const std::size_t n) const noexcept
     {
-        return const_array<char>::subarray(pos, n);
+        return array_view<char>::subarray(pos, n);
     }
 
-    constexpr const const_string substr(const std::size_t pos) const noexcept
+    constexpr const string_view substr(const std::size_t pos) const noexcept
     {
-        return const_array<char>::subarray(pos, size() - pos);
+        return array_view<char>::subarray(pos, size() - pos);
     }
 
     template<std::size_t N>
@@ -364,7 +364,7 @@ public:
     template<std::size_t N>
     constexpr bool in(const char(&s)[N]) const noexcept
     {
-        return const_string {s, N - 1}.contains(*this);
+        return string_view {s, N - 1}.contains(*this);
     }
 
     template<std::size_t N>
@@ -381,7 +381,7 @@ public:
 };
 
 template <class StreamT>
-inline StreamT& operator << (StreamT& stream, const const_string& param) noexcept
+inline StreamT& operator << (StreamT& stream, const string_view& param) noexcept
 {
     stream << '\'';
     stream.write(param.data(), param.size());
@@ -390,7 +390,7 @@ inline StreamT& operator << (StreamT& stream, const const_string& param) noexcep
 }
 
 template<class T>
-constexpr bool operator == (const std::string& container, const const_string& arr) noexcept
+constexpr bool operator == (const std::string& container, const string_view& arr) noexcept
 {
     return arr == container;
 }
