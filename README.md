@@ -20,6 +20,7 @@ static constexpr const_string strings[] = {
     "ccc"
 };
 
+static_assert(const_string {strings[0].substr(15)} == "bcb", "");
 static_assert(const_string {"ddd"} == const_string {"ddd"}, ""); // all other operators have been defined
 static_assert(const_string {"Abc"}[1] == 'b', "");
 static_assert(const_string {strings[0].substr(0, 3)} == const_string {"abc"}, "");
@@ -33,6 +34,11 @@ assert(const_string {"abc"} == std::string {"abc"});
 assert(const_string {"Hello"}.contains(std::string{"H"}));
 
 // Arrays
+constexpr std::array<int, 3> array3 {{1, 2, 3}};
+static_assert(const_array<int> {array3}[2] == 3, "");
+// to create a const_array of several elements we need allocate contiguos chunk of memory, so impossible to implement
+static_assert(const_array<int> {array3}.subarray(2) == const_array<int> {3}, "");
+    
 constexpr std::array<int, 2> array1 {{1, 2}};
 static_assert(const_array<int> {array1}.size() == 2, "");
 static_assert(const_array<int> {array1} == array1, "");
