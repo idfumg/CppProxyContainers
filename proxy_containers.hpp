@@ -9,7 +9,7 @@ namespace proxy_containers {
 template<class T>
 class array_view {
 public:
-    using const_iterator = const T* const;
+    using const_iterator = const T*;
     static constexpr auto npos = std::string::npos;
 
     constexpr array_view(const T* const pointer, const std::size_t N) noexcept
@@ -335,6 +335,12 @@ public:
     template <std::size_t N>
     constexpr string_view(const char(&pointer)[N]) noexcept
         : array_view {pointer, N - 1}
+    {
+
+    }
+
+    constexpr string_view(const array_view<char>& array) noexcept
+        : array_view<char>{array}
     {
 
     }
