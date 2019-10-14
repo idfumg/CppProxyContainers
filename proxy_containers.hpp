@@ -384,6 +384,21 @@ public:
     {
         return find(s, N - 1);
     }
+
+    constexpr std::size_t to_uint() const noexcept
+    {
+        return to_uint(size() - 1);
+    }
+
+private:
+    constexpr std::size_t to_uint(const std::size_t index) const noexcept
+    {
+        return size() == 1 or index == 0
+            ? data()[0] - '0'
+            : size() == 0 or index > size() - 1
+                ? 0
+                : (data()[index] - '0') + 10ULL * to_uint(index - 1);
+    }
 };
 
 template <class StreamT>
