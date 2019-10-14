@@ -331,6 +331,7 @@ public:
     using array_view<char>::contains;
     using array_view<char>::in;
     using array_view<char>::find;
+    using array_view<char>::npos;
 
     template <std::size_t N>
     constexpr string_view(const char(&pointer)[N]) noexcept
