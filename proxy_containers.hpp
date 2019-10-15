@@ -48,6 +48,11 @@ public:
         return m_size;
     }
 
+    constexpr bool empty() const noexcept
+    {
+        return m_size == 0;
+    }
+
     constexpr const_iterator begin() const noexcept
     {
         return m_pointer;
